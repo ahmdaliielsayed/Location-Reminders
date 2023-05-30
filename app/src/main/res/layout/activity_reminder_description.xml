@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <!-- Data item that holds the reminder details -->
+        <variable
+            name="reminderDataItem"
+            type="com.udacity.project4.locationreminders.reminderslist.ReminderDataItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".locationreminders.ReminderDescriptionActivity">
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/app_name"
+                    app:srcCompat="@drawable/ic_logo" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/remindTitleContainer"
+                    style="@style/TextInputLayout"
+                    android:hint="@string/title">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/remindTitleEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:autofillHints="none"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+                        android:maxLength="70"
+                        android:singleLine="true"
+                        android:text="@={reminderDataItem.title}"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/purple_500"
+                        android:textSize="16sp"
+                        tools:ignore="SpeakableTextPresentCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/remindDescriptionContainer"
+                    style="@style/TextInputLayout"
+                    android:hint="@string/description">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/remindDescriptionEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:gravity="start"
+                        android:imeOptions="actionNext"
+                        android:inputType="textMultiLine"
+                        android:lines="6"
+                        android:enabled="false"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:maxLength="1000"
+                        android:overScrollMode="always"
+                        android:scrollbarSize="4dp"
+                        android:scrollbarStyle="insideInset"
+                        android:scrollbars="vertical"
+                        android:scrollHorizontally="true"
+                        android:text="@={reminderDataItem.description}"
+                        android:textAlignment="viewStart"
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    app:cardCornerRadius="8dp"
+                    app:strokeColor="@color/gray"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:clickable="false"
+                            android:drawablePadding="8dp"
+                            android:focusable="false"
+                            android:text="@{reminderDataItem.location}"
+                            android:textColor="@color/purple_500"
+                            app:drawableStartCompat="@drawable/ic_baseline_location_on_24" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/map"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="192dp"
+                    android:layout_margin="16dp"
+                    app:layout_constraintBottom_toTopOf="@+id/materialButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="48dp"
+                    android:layout_marginEnd="48dp"
+                    android:layout_marginBottom="32dp"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:backgroundTint="@color/templateRed"
+                    android:text="@string/delete"
+                    android:textColor="@color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

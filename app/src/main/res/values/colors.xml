@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3C3C3C</color>
+    <color name="colorPrimaryDark">#1C1C1C</color>
+    <color name="colorAccent">#FFB300</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+
+    <color name="teal_200">#FFB300</color>
+    <color name="teal_700">#B16B04</color>
+    <color name="templateGreen">#2BA951</color>
+    <color name="purple_500">#3C3C3C</color>
+    <color name="purple_700">#1C1C1C</color>
+    <color name="templateRed">#C13F55</color>
+    <color name="gray">#C5C5C5</color>
+</resources>
