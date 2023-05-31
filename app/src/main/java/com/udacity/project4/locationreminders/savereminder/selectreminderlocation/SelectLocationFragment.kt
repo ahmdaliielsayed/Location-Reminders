@@ -82,14 +82,15 @@ class SelectLocationFragment : BaseFragment() {
         if (isLocationPermissionDENIED()) {
             requestLocationPermission()
         } else {
-            setMapStyle(map)
-            setPoiClick(map)
-            setMapLongClick(map)
-            setOnPoiClick(map)
             enableMyLocation()
             getUserLocation()
-            setOnMapDataClick(map)
         }
+
+        setMapStyle(map)
+        setPoiClick(map)
+        setMapLongClick(map)
+        setOnPoiClick(map)
+        setOnMapDataClick(map)
     }
 
     private fun isLocationPermissionDENIED(): Boolean = !requireContext().checkPermissionUtils(
