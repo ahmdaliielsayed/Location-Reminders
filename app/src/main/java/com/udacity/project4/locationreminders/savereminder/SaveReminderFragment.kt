@@ -16,6 +16,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.common.api.ResolvableApiException
@@ -50,6 +52,8 @@ class SaveReminderFragment : BaseFragment() {
     private lateinit var geofencingClient: GeofencingClient
 
     private lateinit var reminderDataItem: ReminderDataItem
+
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     companion object {
         internal const val ACTION_GEOFENCE_EVENT = "SaveReminderFragment.locationreminders.action.ACTION_GEOFENCE_EVENT"
@@ -102,16 +106,44 @@ class SaveReminderFragment : BaseFragment() {
                 reminderDataItem = ReminderDataItem(title, description, location, latitude, longitude)
 
                 if (_viewModel.validateEnteredData(reminderDataItem)) {
-                    if (foregroundAndBackgroundLocationPermission()) {
-                        setSettingLocationAndStartGeofence()
+                    if (isPostNotificationGranted()) {
+                        if (foregroundAndBackgroundLocationPermission()) {
+                            setSettingLocationAndStartGeofence()
+                        } else {
+                            requestForegroundAndBackgroundLocationPermissions()
+                        }
                     } else {
-                        requestForegroundAndBackgroundLocationPermissions()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        }
                     }
                 }
             }
         }
 
         geofencingClient = LocationServices.getGeofencingClient(requireActivity())
+
+        setupPermissionsRequestLauncher()
+    }
+
+    private fun setupPermissionsRequestLauncher() {
+        requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                Log.d("asd -> ", "Notification Permission Granted Successfully!")
+            } else {
+                snackBar(getString(R.string.request_notification_grant_permission))
+                    ?.setAction(getString(R.string.try_again)) {
+                        if (isPostNotificationGranted()) {
+                            Log.d("asd -> ", "Notification Permission Granted Successfully!")
+                        } else {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        }
+                    }
+                    ?.show()
+            }
+        }
     }
 
 //    @TargetApi(29)
@@ -132,6 +164,17 @@ class SaveReminderFragment : BaseFragment() {
             true
         }
         return foregroundLocationApproved && backgroundPermissionApproved
+    }
+
+    private fun isPostNotificationGranted(): Boolean {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            )
+        } else {
+            true
+        }
     }
 
     private fun setSettingLocationAndStartGeofence(b: Boolean = true) {
